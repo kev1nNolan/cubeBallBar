@@ -35,7 +35,8 @@ cc.Class({
     // onLoad () {},
 
     start () {
-
+        this.node.addComponent(cc.BoxCollider);
+        cc.log("BulletBullet")
     },
     unuse: function () {
         var pool = this.getComponent('Bullet')._pool;
@@ -44,7 +45,7 @@ cc.Class({
             pool.put(this);
         }
         else {
-            this.removeFromParent(true);
+            this.node.removeFromParent(true);
         }
     },
     
