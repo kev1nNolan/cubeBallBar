@@ -9,4 +9,6 @@
 //  - [English] http://www.cocos2d-x.org/docs/creator/en/scripting/life-cycle-callbacks.html
 window.D = {
     game: null,
+    npc:null
+    
 };

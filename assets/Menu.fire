@@ -15,6 +15,15 @@
     "_children": [
       {
         "__id__": 2
+      },
+      {
+        "__id__": 11
+      },
+      {
+        "__id__": 13
+      },
+      {
+        "__id__": 15
       }
     ],
     "_tag": -1,
@@ -91,7 +100,7 @@
     "_contentSize": {
       "__type__": "cc.Size",
       "width": 960,
-      "height": 640
+      "height": 1136
     },
     "_rotationX": 0,
     "_rotationY": 0,
@@ -100,7 +109,7 @@
     "_position": {
       "__type__": "cc.Vec2",
       "x": 480,
-      "y": 320
+      "y": 568
     },
     "_skewX": 0,
     "_skewY": 0,
@@ -143,7 +152,7 @@
     "_contentSize": {
       "__type__": "cc.Size",
       "width": 960,
-      "height": 640
+      "height": 1136
     },
     "_rotationX": 0,
     "_rotationY": 0,
@@ -151,7 +160,7 @@
     "_scaleY": 1,
     "_position": {
       "__type__": "cc.Vec2",
-      "x": 0,
+      "x": 4,
       "y": 0
     },
     "_skewX": 0,
@@ -170,7 +179,7 @@
     },
     "_enabled": true,
     "_spriteFrame": {
-      "__uuid__": "777d1cd6-f2b8-4058-8103-6c45f7ee9541"
+      "__uuid__": "f5b5421b-6dfb-4fb8-99fd-c64ea539bd2d"
     },
     "_type": 0,
     "_sizeMode": 0,
@@ -224,7 +233,7 @@
     "_contentSize": {
       "__type__": "cc.Size",
       "width": 200,
-      "height": 45
+      "height": 60
     },
     "_rotationX": 0,
     "_rotationY": 0,
@@ -251,7 +260,7 @@
     },
     "_enabled": true,
     "_spriteFrame": {
-      "__uuid__": "cf40016d-7b74-4686-b477-48d7a4e87b20"
+      "__uuid__": "7a962193-2b73-472a-afbb-cab60dc7a400"
     },
     "_type": 0,
     "_sizeMode": 0,
@@ -329,7 +338,7 @@
     "target": {
       "__id__": 2
     },
-    "component": "Game",
+    "component": "startMenu",
     "handler": "onStartGame",
     "customEventData": ""
   },
@@ -344,18 +353,225 @@
     "_designResolution": {
       "__type__": "cc.Size",
       "width": 960,
-      "height": 640
+      "height": 1136
     },
     "_fitWidth": false,
     "_fitHeight": true
   },
   {
-    "__type__": "a9e50sMQnxKFrBV3pSRt3X4",
+    "__type__": "6798cxSmWJJq4fvpYSB+cqD",
     "_name": "",
     "_objFlags": 0,
     "node": {
       "__id__": 2
     },
     "_enabled": true
+  },
+  {
+    "__type__": "cc.Node",
+    "_name": "richtext",
+    "_objFlags": 0,
+    "_parent": {
+      "__id__": 1
+    },
+    "_children": [],
+    "_tag": -1,
+    "_active": true,
+    "_components": [
+      {
+        "__id__": 12
+      }
+    ],
+    "_prefab": null,
+    "_id": "946VQ0k2tFv6bik91mh7L8",
+    "_opacity": 255,
+    "_color": {
+      "__type__": "cc.Color",
+      "r": 255,
+      "g": 255,
+      "b": 255,
+      "a": 255
+    },
+    "_cascadeOpacityEnabled": true,
+    "_anchorPoint": {
+      "__type__": "cc.Vec2",
+      "x": 0.5,
+      "y": 0.5
+    },
+    "_contentSize": {
+      "__type__": "cc.Size",
+      "width": 160,
+      "height": 100
+    },
+    "_rotationX": 0,
+    "_rotationY": 0,
+    "_scaleX": 1,
+    "_scaleY": 1,
+    "_position": {
+      "__type__": "cc.Vec2",
+      "x": 324,
+      "y": 916
+    },
+    "_skewX": 0,
+    "_skewY": 0,
+    "_localZOrder": 0,
+    "_globalZOrder": 0,
+    "_opacityModifyRGB": false,
+    "groupIndex": 0
+  },
+  {
+    "__type__": "cc.RichText",
+    "_name": "",
+    "_objFlags": 0,
+    "node": {
+      "__id__": 11
+    },
+    "_enabled": true,
+    "_N$string": "<color=#0fffff>欢乐</color>",
+    "_N$horizontalAlign": 0,
+    "_N$fontSize": 80,
+    "_N$font": null,
+    "_N$maxWidth": 0,
+    "_N$lineHeight": 100,
+    "_N$imageAtlas": null,
+    "_N$handleTouchEvent": true
+  },
+  {
+    "__type__": "cc.Node",
+    "_name": "richtext",
+    "_objFlags": 0,
+    "_parent": {
+      "__id__": 1
+    },
+    "_children": [],
+    "_tag": -1,
+    "_active": true,
+    "_components": [
+      {
+        "__id__": 14
+      }
+    ],
+    "_prefab": null,
+    "_id": "b2sHpHXPNC0qYHr1BWoziU",
+    "_opacity": 255,
+    "_color": {
+      "__type__": "cc.Color",
+      "r": 255,
+      "g": 255,
+      "b": 255,
+      "a": 255
+    },
+    "_cascadeOpacityEnabled": true,
+    "_anchorPoint": {
+      "__type__": "cc.Vec2",
+      "x": 0.5,
+      "y": 0.5
+    },
+    "_contentSize": {
+      "__type__": "cc.Size",
+      "width": 120,
+      "height": 60
+    },
+    "_rotationX": 0,
+    "_rotationY": 0,
+    "_scaleX": 1,
+    "_scaleY": 1,
+    "_position": {
+      "__type__": "cc.Vec2",
+      "x": 423,
+      "y": 807
+    },
+    "_skewX": 0,
+    "_skewY": 0,
+    "_localZOrder": 0,
+    "_globalZOrder": 0,
+    "_opacityModifyRGB": false,
+    "groupIndex": 0
+  },
+  {
+    "__type__": "cc.RichText",
+    "_name": "",
+    "_objFlags": 0,
+    "node": {
+      "__id__": 13
+    },
+    "_enabled": true,
+    "_N$string": "<color=#00ff00>墨鱼</c>",
+    "_N$horizontalAlign": 0,
+    "_N$fontSize": 60,
+    "_N$font": null,
+    "_N$maxWidth": 0,
+    "_N$lineHeight": 60,
+    "_N$imageAtlas": null,
+    "_N$handleTouchEvent": true
+  },
+  {
+    "__type__": "cc.Node",
+    "_name": "richtext",
+    "_objFlags": 0,
+    "_parent": {
+      "__id__": 1
+    },
+    "_children": [],
+    "_tag": -1,
+    "_active": true,
+    "_components": [
+      {
+        "__id__": 16
+      }
+    ],
+    "_prefab": null,
+    "_id": "b7XMwNEOVB6K+5lRYfTF4d",
+    "_opacity": 255,
+    "_color": {
+      "__type__": "cc.Color",
+      "r": 143,
+      "g": 9,
+      "b": 9,
+      "a": 255
+    },
+    "_cascadeOpacityEnabled": true,
+    "_anchorPoint": {
+      "__type__": "cc.Vec2",
+      "x": 0.5,
+      "y": 0.5
+    },
+    "_contentSize": {
+      "__type__": "cc.Size",
+      "width": 400,
+      "height": 50
+    },
+    "_rotationX": 0,
+    "_rotationY": 0,
+    "_scaleX": 1,
+    "_scaleY": 1,
+    "_position": {
+      "__type__": "cc.Vec2",
+      "x": 209,
+      "y": 713
+    },
+    "_skewX": 0,
+    "_skewY": 0,
+    "_localZOrder": 0,
+    "_globalZOrder": 0,
+    "_opacityModifyRGB": false,
+    "groupIndex": 0
+  },
+  {
+    "__type__": "cc.RichText",
+    "_name": "",
+    "_objFlags": 0,
+    "node": {
+      "__id__": 15
+    },
+    "_enabled": true,
+    "_N$string": "<color=#8F0909>一只墨鱼的故事。。。</color>",
+    "_N$horizontalAlign": 0,
+    "_N$fontSize": 40,
+    "_N$font": null,
+    "_N$maxWidth": 0,
+    "_N$lineHeight": 50,
+    "_N$imageAtlas": null,
+    "_N$handleTouchEvent": true
   }
 ]

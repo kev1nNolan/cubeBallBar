@@ -41,11 +41,13 @@ cc.Class({
             default: null,
             type: cc.Node
         },
+        
         gameOver: {
             default: null,
             type: cc.Node
         },
-        followSpeed: 200
+        followSpeed: 200,
+        isGameover : false
     },
 
     // LIFE-CYCLE CALLBACKS:
@@ -58,29 +60,20 @@ cc.Class({
         D.game = this;
         this.score = 0;
         this.scoreText.string = this.score;
-        this.gameOver.active = false;
+        // this.gameOver.active = false;
+        this.gameOver.removeFromParent(true)
     },
-    gainScore () {
-        //-- 分数+1
-        // cc.log("gainScoregainScore")
-        this.score++;
-        this.scoreText.string = this.score;
-        //-- 分数增加音效
-        // cc.audioEngine.playEffect(this.scoreAudio);
-    },
+    
     start () {
         cc.director.getCollisionManager().enabled = true;
+        // this._npc.loadball()
+
+
         // cc.director.getCollisionManager().enabledDebugDraw = true;
         // cc.director.getCollisionManager().enabled = true;
     },
     
-    onStartGame () {
-        // 初始化计分
-        cc.log("start game!!!");
-        cc.director.loadScene('Game');
-        
-
-    },
+    
 
     registerTouchMsg()
     {
@@ -93,16 +86,13 @@ cc.Class({
 
 
     },
-    showGameOver(){
 
-        this.gameOver.active = true;
-        this.gameOver.getComponent('GameOver').score.string = this.score;
-        this.onDestroy()
-    },
+   
     touch_start(event){
         var touches = event.getTouches();
         var touchLoc = touches[0].getLocation();
         this.isMoving = true;
+        this.follower.setRotation(180)
         this.moveToPos = this.follower.parent.convertToNodeSpaceAR(touchLoc);
         this.generatorBullet();
     },
@@ -113,8 +103,37 @@ cc.Class({
         this.generatorBullet();
     },
     touch_end(event){
+        this.follower.setRotation(0)
         this.isMoving = false;
     },
+
+
+    gainScore () {
+        //-- 分数+1
+        // cc.log("gainScoregainScore")
+        this.score++;
+        this.scoreText.string = this.score;
+        //-- 分数增加音效
+        // cc.audioEngine.playEffect(this.scoreAudio);
+    },
+    showGameOver(){
+        this.isGameover = true
+        var pos0 = this.gameOver.getPosition(pos)
+        cc.log("pos0", pos0.toString())
+        var pos = this.gameOver.convertToWorldSpaceAR(this.node.getPosition())
+        cc.log("pos01", pos.toString())
+        cc.director.getScene().addChild(this.gameOver);
+        this.gameOver.setPosition(pos)
+        this.gameOver.getComponent('GameOver').score.string = this.score;
+
+        this.onDestroy()
+    },
+    isGameOver()
+    {
+        return this.isGameover;
+    },
+
+
     onDestroy () {
         // 取消键盘输入监听
         this.canvas.off(cc.Node.EventType.TOUCH_START, this.touch_start, this);
@@ -129,7 +148,8 @@ cc.Class({
         //     cc.log("gameover")
         //     return
         // }
-        // this._npc.update();
+        // this.generatorBullet()
+        this._npc.update();
         if (!this.isMoving) return;
         // var oldPos = this.follower.position;
         // get move direction
@@ -157,7 +177,7 @@ cc.Class({
         var bullet = this._pool.get();
         if (!bullet) {
             bullet = cc.instantiate(this.bulletPrefab);
-        
+            bullet.setScale(0.2)
             // Add pool handler component which will control the touch event
             bullet.addComponent('Bullet');
 
@@ -170,21 +190,23 @@ cc.Class({
             // cc.log('xxxxx',bullet.x);
             // cc.log('yyyy',bullet.y)
             // cc.log('y=+++',bullet.y+h)
-            bullet.runAction(cc.sequence(
-                cc.moveTo(eachTime, cc.p(bullet.x, bullet.y+h)),
-                cc.callFunc(this.removeBullet, this, bullet)
-            ));
+
+            // bullet.runAction(cc.sequence(
+            //     cc.moveTo(0.02, cc.p(bullet.x, bullet.y+h)),
+            //     cc.callFunc(this.removeBullet, this, bullet)
+            // ));
             this.node.addChild(bullet);
         }
         lastClick = now;
         
     },
     removeBullet: function (sender, bullet) {
-        // cc.log("remove bullet");
         this._pool.put(bullet);
         bullet.removeFromParent(true);
-    }
+    },
 
 
-    // update (dt) {},
+    // update (dt) {
+        
+    // },
 });

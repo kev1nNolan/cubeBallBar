@@ -27,39 +27,32 @@ cc.Class({
         //         this._bar = value;
         //     }
         // },
-        _pool: null
     },
 
     // LIFE-CYCLE CALLBACKS:
 
-    // onLoad () {},
+    onLoad () {
+        wx.showShareMenu();
+        wx.onShareAppMessage(
+          function () {
+            return {
+              title: '欢乐墨鱼，独自战斗到天亮！',
+              imageUrl: 'res/raw-assets/resources/share.png',
+            }
+          }
+        );
+    },
 
     start () {
-        this.node.addComponent(cc.BoxCollider);
-        cc.log("BulletBullet")
-    },
-    unuse: function () {
-        var pool = this.getComponent('Bullet')._pool;
-
-        if (pool) {
-            pool.put(this);
-        }
-        else {
-            this.node.removeFromParent(true);
-        }
-    },
-    
-    reuse: function () {
 
     },
-    update (dt) {
-        var speedRate = 2;
-        var oldP = this.node.getPosition();
-        var oldx = oldP.x;
-        var oldy = oldP.y;
+    onStartGame () {
+        // 初始化计分
+        cc.log("start game!!!");
+        cc.director.loadScene('Game');
         
-        var newy = speedRate * 10 + oldy;
 
-        this.node.setPosition(oldx,newy)
     },
+
+    // update (dt) {},
 });

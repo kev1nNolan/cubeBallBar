@@ -8,11 +8,14 @@
 //  - [Chinese] http://docs.cocos.com/creator/manual/zh/scripting/life-cycle-callbacks.html
 //  - [English] http://www.cocos2d-x.org/docs/creator/en/scripting/life-cycle-callbacks.html
 // const g = require("Globals");
-var speedRate = 3
-var collideDistance = 10
-var collideFloor = false
-var lastMove = 0
-var gameOver = false
+let ball = require("ball")
+// var speedRate = 1
+// var collideDistance = 10
+// var collideFloor = false
+
+
+
+
 cc.Class({
     extends: cc.Component,
 
@@ -32,8 +35,17 @@ cc.Class({
         //         this._bar = value;
         //     }
         // },
-        roundBall: [cc.node],
+        roundballResAry : [],
+        normalballResAry : [],
+        boomPaintResAry : [],
+        appearSide: 1,
+        curballCount : 0,
 
+
+        // circleNode:{
+        //     default:null,
+        //     type:cc.Graphics,
+        //     }, 
         
     },
 
@@ -45,157 +57,296 @@ cc.Class({
         
     },
     init (){
-        cc.log("npc init");
+        D.npc = this;
         var self = this;
-        var loadCallBack = this._loadCallBack.bind(this);
-        cc.loader.loadRes("atlas/ball_normal", cc.SpriteAtlas, loadCallBack);
-        // cc.director.getCollisionManager().enabled = true;
-        gameOver = false
-        // 
+
+
+        var urls = ['level-item-0', 'level-item-1', 'level-item-2', 'level-item-3', 'level-item-4'];
+        cc.loader.loadResArray(urls, cc.SpriteFrame, function (err, assets) {
+            cc.log("1111111")
+            if (err) {
+                cc.log("11111112222")
+                cc.error(err.message || err);
+                cc.error(err);
+                return;
+            }
+
+
+            for(i = 0; i < assets.length; i++)
+            {
+                self.roundballResAry.push(assets[i])
+            }
+
+
+            // cc.log("spriteFrames:", spriteFrames.length)
+            cc.log("self.roundballResAry:", self.roundballResAry)
+            self.loadball();
+            // ...
+        });
+
+        urls = ['level-item-5', 'level-item-6', 'level-item-7', 'level-item-8'];
+        cc.loader.loadResArray(urls, cc.SpriteFrame, function (err, assets) {
+            cc.log("1111111222233333")
+            if (err) {
+                cc.log("11111112222333334444")
+                cc.error(err.message || err);
+                cc.error(err);
+                return;
+            }
+            // spriteFrames = assets;
+
+            for(i = 0; i < assets.length; i++)
+            {
+                self.normalballResAry.push(assets[i])
+            }
+
+
+            // cc.log("spriteFrames:", spriteFrames.length)
+            cc.log("self.roundballResAry:", self.roundballResAry)
+            self.loadball();
+            // ...
+        });
+
+
+
+        // cc.loader.loadRes("atlas/ball_round", cc.SpriteAtlas, function (err, atlas) {
+          
+        //     for(i = 0; i < 10; i++)
+        //     {
+        //         var ball = "ball_" + i;
+        //         var spriteFrame = atlas.getSpriteFrame(ball);                
+        //         self.roundballResAry.push(spriteFrame)
+        //     }
+            
+           
+           
+
+        // });
+
+        // cc.loader.loadRes("atlas/ball_normal", cc.SpriteAtlas, function (err, atlas) {
+        //     self._normalRes = atlas;
+
+        //     for(i = 0; i < 10; i++)
+        //     {
+        //         var ball = "ball_" + i;
+        //         var spriteFrame = atlas.getSpriteFrame(ball);             
+        //         self.normalballResAry.push(spriteFrame)
+        //     }
+
+            
+        //     self.loadball();
+            
+            
+        // });
+        
+        cc.loader.loadRes("atlas/death_animation", cc.SpriteAtlas, function (err, atlas) {
+            // self._normalRes = atlas;
+            cc.log("11111112222333334444")
+            for(i = 1; i < 5; i++)
+            {
+                var ball = "death_animation" + i;
+                var spriteFrame = atlas.getSpriteFrame(ball);             
+                self.boomPaintResAry.push(spriteFrame)
+            }
+
+            // for(i = 1; i < 6; i++)
+            // {
+            //     var ball = "paint-" + i + "-" + i
+            //     var spriteFrame = atlas.getSpriteFrame(ball);             
+            //     self.boomPaintResAry.push(spriteFrame)
+            // }
+            
+            // self.loadboom(cc.v2(200,200))
+            // self.loadball();
+            
+        });
+        
+        
+
+    },
+    drawCircle(ballnode)
+    {
+        var circleNode = new cc.Node()
+        circleNode.addComponent(cc.Graphics);
+        var ctx = circleNode.getComponent(cc.Graphics);
+        cc.log("ctx111:", ctx)
+        var pos = ballnode.getPosition()
+        var r = ballnode.width * ballnode.scale + 30//Math.floor(Math.random() * 30) + 10
+        ctx.circle(pos.x,pos.y, r);
+        var colorAry = [cc.Color.RED,cc.Color.WHITE ,cc.Color.BLACK ,cc.Color.GRAY,cc.Color.GREEN, cc.Color.YELLOW, cc.Color.ORANGE, cc.Color.CYAN, cc.Color.MAGENTA]
+        var index = Math.floor(Math.random()*colorAry.length)
+        ctx.strokeColor = colorAry[index];
+        ctx.stroke();
+        cc.director.getScene().addChild(circleNode);
+        this.scheduleOnce(function(){
+            // this.student_state2 = 0;
+            circleNode.destroy()
+         }, 2);
+    },
+    loadboom (pos){
+        if(this.boomPaintResAry.length > 0)
+        {
+            cc.log("this.boomPaintResAry.length", this.boomPaintResAry.length)
+            var boomNode = new cc.Node()
+            cc.director.getScene().addChild(boomNode);
+
+            var index = Math.floor(Math.random()*this.boomPaintResAry.length)
+            var sprite = boomNode.addComponent(cc.Sprite);
+            sprite.spriteFrame = this.boomPaintResAry[index]
+            boomNode.setPosition(pos)
+            // boomNode.setScale(0.7)
+            this.scheduleOnce(function(){
+                // this.student_state2 = 0;
+                boomNode.destroy()
+             }, 2);
+
+
+
+        }
+
     },
 
-    _loadCallBack (err, res){
-        cc.log(err)
-        cc.log("this.node", this.node)
-        this._res = res;
-        // cc.loader.setAutoRelease(atlas, true);
-        this.node = new cc.Node();
-        // var randX = (Math.random() - 0.5) * 2 * cc.director.getScene().getChildByName('Canvas').width/2;
-        var screenH = cc.winSize.height;
-        var randY =  2 * screenH/3 + (Math.random() * screenH/4); 
-        // node.setPosition(cc.director.getScene().getChildByName('Canvas').width, cc.director.getScene().getChildByName('Canvas').height);
-        this.node.setPosition(0,randY);
-        this.node.setScale(cc.v2(0.2,0.2))
-        this.node.setRotation(0.5)
-        var sprite = this.node.addComponent(cc.Sprite);
-
-        sprite.trim = true;
-        sprite.spriteFrame = this._res.getSpriteFrame('ball_0');
-        // node.getComponent(cc.Sprite).spriteFrame.setRect(cc.rect(300, 500, 200, 200));
-        // sprite.spriteFrame.setRect(cc.rect(0, 0, 200, 200));
-        cc.log(sprite.spriteFrame.getRect().width.toString());
-        cc.log(sprite.spriteFrame.getRect().height.toString());
-        this.node.addComponent(cc.BoxCollider);
-        this.node.addComponent("npc");
-        // this._node = node;
-        
-        
-        
-        
-        // mycollider.offset.x = this.node.x;
-        // mycollider.offset.y = this.node.y;
-        // mycollider.size.width = this.node.width;
-        // mycollider.size.height = this.node.height;
-        cc.director.getScene().addChild(this.node);
-        cc.log("this.node111", this.node)
-        // this._node.group = "ball";
-        // this._node.groupIndex = 5;
-        // this._node.addComponent("ColliderListener");
-
-    },
-    onCollisionEnter: function (other, self) {
-        
-        if(other.node.getComponent("Player"))
+    loadball (){
+        if(this.normalballResAry.length > 0)
         {
-            cc.log("shitshit");
-            // other.node.removeFromParent(true);
-            gameOver = 1;
-            D.game.showGameOver();
-        }
-        if(other.node.getComponent("Bullet"))
-        {
-            cc.log("shitshit1111");
-            // self.node.removeFromParent(true);
-            other.node.removeFromParent(true);
-            D.game.gainScore()
-            cc.log("shitshit1111");
-        }
-        if(other.node.name == "floor")
-        {
-            collideFloor = true
-            cc.log("shitshit11112222");
-            // self.node.removeFromParent(true);
-            // other.node.removeFromParent(true);
-            // var screenH = cc.winSize.height;
-            // var screenW = cc.winSize.width;
-            // var randY =  this.node.getPosition().x + (Math.random() * screenH/6); 
-            // var randX =  this.node.getPosition().x + (Math.random() - 0.5) * screenW/10;
-            // this.node.runAction(cc.sequence(
-            //     cc.moveTo(0.5, cc.p(randX, randY)),
-            //     collideFloor = false
-            // ));
-        }
-        // cc.log("shitshit11112222333",other.node.name);
-    },
+            this.ballNode = new cc.Node()
+            cc.director.getScene().addChild(this.ballNode);
+            // this.node.parent.addChild(this.ballNode);
+            // cc.find("Canvas").addChild(this.ballNode);
+            this.ballNode.addComponent("ball");
+           
     
-
-
-    onCollisionStay: function (other, self) {
-        // cc.log("shitshit111")
+            var screenH = cc.winSize.height;
+            var screenW = cc.winSize.width;
+            
+            this.appearSide = -this.appearSide;//每次反向出现
+            var x = this.appearSide>0?0:screenW;
+            var randY =  2 * screenH/3 + (Math.random() * screenH/3);
+            var director = x===0?"right":"left";
+            var index = Math.floor(Math.random()*this.normalballResAry.length)
+            var spriteFrame = Math.random() > 0.5? this.normalballResAry[index]:this.roundballResAry[index]
+            this.ballNode.getComponent("ball").init(director, x, randY,(index+1)*3, spriteFrame)
+            this.ballNode.getComponent("ball").setSpeedRate(Math.random() * 5, 1000);
+            // this.ballNode.setScale(0.7)
+            this.ballNode.name = "normalball"
+            this.curballCount++;
+            cc.log("loadballloadballloadballloadball")
+        }
 
     },
-    // end 
- 
-    // 碰撞结束
-    onCollisionExit: function (other, self) {
-        // cc.log("shitshit2222")
-
-    },
-
-    getPlayerDistance(){
-        // cc.log('getPlayerDistance')
-        // var npcPos = this._node.getPosition();
-        // // 根据两点位置计算两点之间距离
-        
-        // cc.log('player:', player.toString())
-        // var playerPos = player.getPosition();
-        // cc.log('playpos:', playerPos.toString())
-        // cc.log('npcpos:', npcPos.toString())
-        // var playermoveToPos = player.parent.convertToNodeSpaceAR(touchLoc);
-        
-        // cc.log('npcRect',npcRect.toString())
-        
-        // cc.log('playerRect',playerRect.toString())
-        // var player = cc.find("Canvas/player");
-        // var playerwpos = player.convertToWorldSpace(cc.v2(0,0));
-        // var npcwPos = this._node.convertToWorldSpace(cc.v2(0,0));
-        // var npcRect = cc.rect(npcwPos.x,npcwPos.y,this._node.width, this._node.height);
-        // var playerRect = cc.rect(playerwpos.x,playerwpos.y,player.width,player.height)
-        // // cc.log("playerwpos",playerwpos.toString());
-        // cc.log('playerRect',playerRect.toString())
-        // cc.log('npcRect',npcRect.toString())
-        // // npcRect = cc.rect(20,20,100,100);
-        // // playerRect = cc.rect(20,20,100,100);
-        // if(npcRect.containsRect(playerRect))
-        // {
-        //     // this._node.removeFromParent(true);
-        //     collide = true;
-        //     cc.log('fuckfuck')
-        // }
-        // var dist = this.node.position.sub(playerPos).mag();
-        // return dist;
-    },
-
-
-    update (dt) {
-        if(!this.node || gameOver)
-            return
-        var now = Date.now();
-        cc.log("nodenode222:",this.node, this._res)
-        var oldP = this.node.getPosition();
-        var oldx = oldP.x;
-        var oldy = oldP.y;
-        var newx,newy;
-        if(oldx < cc.winSize.width)
+    newSmallBall(pos, num){
+        if(this.roundballResAry.length > 0)
         {
-            newx = speedRate * Math.random() + oldx;
+            this.smallballNode = new cc.Node()
+            
+            this.smallballNode.addComponent("smallBall");
+ 
+            var director = pos.x<cc.winSize.width/2?"right":"left";
+            var index = Math.floor(Math.random()*this.roundballResAry.length)
+
+            var addp = 80
+            var director = "right"
+            if(num%2 == 1)
+            {
+                addp = -addp;
+                director = "left"
+            }
+            cc.log("pos.y:::", num%2, num, director)
+            this.smallballNode.getComponent("smallBall").init(director, pos.x + addp , pos.y, this.roundballResAry[index])
+            this.smallballNode.getComponent("smallBall").setSpeedRate(Math.random() * 5 , 1000);
+            cc.director.getScene().addChild(this.smallballNode);
+            // this.smallballNode.setScale(0.3)
+            this.ballNode.name = "roundball"
+            cc.log("newSmallBall ")
+            this.curballCount++;
+        }
+
+    },
+    damageByBullet(ballNode){
+        
+        // 
+        
+        cc.log("111111111")
+        var pos = ballNode.getPosition()
+        if(ballNode.name == "normalball")
+        {
+            cc.log("111111111222")
+            var string = ballNode.getComponent("ball").getString()
+            if(string > 1)
+            {
+                cc.log("1111111112223333")
+                string -= 1;
+                ballNode.getComponent("ball").setString(string) //大球数字减1
+                // ballNode.getComponent("ball").setString(string)
+                //20%概率爆炸生成对应数量小球
+                if( Math.random() < 0.2)
+                {
+                    // cc.log("11111111122233334444")
+                    this.curballCount--;
+                    ballNode.removeFromParent(true); 
+                
+                    for(i = 0;i< 2; i ++)
+                    {
+                        cc.log("111111111222333344445555666")
+                        cc.log("pospos:", i)
+                        // if(i < 2)
+                        this.newSmallBall(pos, i)
+                    }
+                    if(Math.random() < 0.5)
+                        this.loadball();
+
+                    ballNode.destroy()
+                        
+                }
+                // cc.log("111111111222333344445555")
+                 
+                
+
+            }
+            else{
+                cc.log("1111111112223333444455556667777")
+                this.curballCount--;
+                ballNode.removeFromParent(true);    //大球最后移除 再生成新的大球
+                ballNode.destroy()
+                this.loadball();
+            }
         }
         else
         {
-            newx = -speedRate * Math.random() + oldx;
-        }
-        newy = -speedRate * Math.random() + oldy;
+            
 
-        this.node.setPosition(newx,newy)
+            cc.log("1111111112223333444455556667777888")
+            ballNode.removeFromParent(true); //小球直接移除
+            this.loadboom(pos)
+            this.curballCount--;
+            for(i = 0; i < 2; i ++)
+            {
+                if(Math.random() < 0.5)
+                    this.drawCircle(ballNode)
+                
+            }
+            ballNode.destroy()
+        }
+
+
+      
+    },
+
+
+   
+
+
+
+
+
+
+    update (dt) {
+        
+      cc.log('curballCountcurballCount:', this.curballCount)
+      if(this.curballCount < 2)
+      {
+          this.loadball()
+      }
+        
     },
 });

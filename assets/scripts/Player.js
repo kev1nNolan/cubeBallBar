@@ -61,6 +61,11 @@ cc.Class({
     },
 
     start () {
+
+        // this.circleNode = new cc.Node()
+        // this.circleNode.setPosition(200,200)
+        // cc.director.getScene().addChild(this.circleNode);
+
         // var collider = cc.director.getCollisionManager();
         // collider.enabled =true;
         // collider.enabledDebugDraw =true;
@@ -76,13 +81,13 @@ cc.Class({
 
         // collider.enabledDebugDraw =true;
     },
-    getPlayerDistance(){
-        // var playerPos = this.node.getCenterPos();
-        // // 根据两点位置计算两点之间距离
-        // var npcPos = cc.find("ball_0")
-        // var dist = this.node.position.sub(playerPos).mag();
-        // return dist;
-    },
+    // getPlayerDistance(){
+    //     // var playerPos = this.node.getCenterPos();
+    //     // // 根据两点位置计算两点之间距离
+    //     // var npcPos = cc.find("ball_0")
+    //     // var dist = this.node.position.sub(playerPos).mag();
+    //     // return dist;
+    // },
     update (dt) {
             
         // if (!this.isMoving) return;

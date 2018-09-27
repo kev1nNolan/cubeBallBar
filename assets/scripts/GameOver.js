@@ -20,4 +20,21 @@ var GameOverMenu = cc.Class({
     restart: function () {
         cc.director.loadScene('Game');
     },
+    share: function () {
+        // cc.director.loadScene('Game');
+        wx.shareAppMessage({
+            title: '学校小霸王，快来找回当年的自尊。',
+            imageUrl: 'image/share/share1.png',
+            success: function (res) {
+              // 转发成功
+              console.log("shareMenu000", type);
+              console.log(res);
+            },
+            fail: function (res) {
+              // 转发失败
+              console.log("shareMenu111");
+              console.log(res);
+            }
+          })
+    },
 });
